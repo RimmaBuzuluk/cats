@@ -98,17 +98,32 @@ export default {
       this.facts = filtered
     },
     async fetchFacts(limit = 10, max_length = 200) {
-      try {
-        const res = await fetch(`https://catfact.ninja/facts?limit=${limit}&max_length=${max_length}`)
-        const data = await res.json()
-        this.facts = data.data || data
-        this.filterFacts()  // застосувати фільтри після завантаження
-      } catch (err) {
-        console.error("Помилка завантаження фактів:", err)
-      } finally {
-        this.loading = false
-      }
-    }
+  try {
+    // Завантажуємо факти
+    const res = await fetch(`https://catfact.ninja/facts?limit=${limit}&max_length=${max_length}`)
+    const data = await res.json()
+    let facts = data.data || data
+
+    const imagePromises = facts.map(() => 
+      fetch("https://api.thecatapi.com/v1/images/search")
+        .then(res => res.json())
+        .then(imgData => imgData[0]?.url || "")
+    )
+
+    const images = await Promise.all(imagePromises)
+
+    this.facts = facts.map((fact, index) => ({
+      ...fact,
+      image: images[index]
+    }))
+
+    this.filterFacts()
+  } catch (err) {
+    console.error("Помилка завантаження фактів:", err)
+  } finally {
+    this.loading = false
+  }
+}
   },
   created() {
     this.checkAuth()
