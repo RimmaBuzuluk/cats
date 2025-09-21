@@ -10,25 +10,27 @@
       
       <div class="controls-row">
         <SearchInput 
-          v-model="searchQuery" 
-          placeholder="Search facts here"
-          @input="filterFacts"
+          :modelValue="searchQuery"
+          @update:modelValue="setSearch"
         />
-        
         <FilterDropdown 
-          v-model="selectedFilter" 
-          @update:modelValue="filterFacts"
+          :modelValue="selectedFilter"
+          @update:modelValue="setFilterOption"
         />
       </div>
     </div>
 
     <div class="facts-grid">
       <CardItem
-        v-for="fact in facts" 
+        v-for="fact in paginatedFacts"
         :key="fact.id"
         :fact="fact"
         @open="goToFact(fact)"
       />
+    </div>
+
+    <div v-if="hasMoreFacts" class="load-more-container">
+      <button class="load-more-btn" @click="loadMore">Load more</button>
     </div>
 
     <div v-if="loading" class="no-facts">
@@ -38,6 +40,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from "vuex"
 import CardItem from "@/components/CatdItem.vue"
 import HeaderBar from "@/components/HeaderBar.vue"
 import SearchInput from "@/components/SearchInput.vue"
@@ -49,77 +52,64 @@ export default {
   data() {
     return {
       username: localStorage.getItem("username") || "Користувач",
-      searchQuery: "",
-      selectedFilter: "all",
-      facts: [],
-      loading: true
+      itemsPerPage: 10,
+      loading: true,
+      currentPage: 0
     }
   },
-  methods: {
-    checkAuth() {
-      if (!localStorage.getItem("isAuthenticated")) {
-        this.$router.push("/login")
-      }
+  computed: {
+    ...mapState(["searchQuery", "selectedFilter"]),
+    ...mapGetters(["filteredFacts"]),
+    paginatedFacts() {
+      return this.filteredFacts.slice(0, (this.currentPage + 1) * this.itemsPerPage)
     },
-    async loadFacts() {
-      await this.$store.dispatch('fetchFacts')
-      this.facts = this.$store.state.allFacts
-      this.filterFacts()
+    hasMoreFacts() {
+      return this.paginatedFacts.length < this.filteredFacts.length
+    },
+    
+  },
+  methods: {
+    ...mapMutations(["setSearchQuery", "setFilter"]),
+
+    setSearch(query) {
+      this.setSearchQuery(query)
+      this.currentPage = 0
+    },
+    setFilterOption(filter) {
+      this.setFilter(filter)
+      this.currentPage = 0
+    },
+    async loadMore() {
+      this.loading = true
+      this.currentPage++
+      await this.$store.dispatch("fetchFacts", { limit: this.itemsPerPage })
+      this.loading = false
     },
     goToFact(fact) {
-      this.$router.push({ name: 'fact', params: { id: fact.id } })
+      this.$router.push({ name: "fact", params: { id: fact.id } })
     },
     toggleTheme() {
       document.body.classList.toggle("dark-theme")
     },
-    filterFacts() {
-      let filtered = [...this.facts]
-
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase()
-        filtered = filtered.filter(fact =>
-          fact.fact.toLowerCase().includes(query)
-        )
+    checkAuth() {
+      if (!localStorage.getItem("isAuthenticated")) {
+        this.$router.push("/login")
       }
-
-      // Фільтри по довжині
-      switch (this.selectedFilter) {
-        case "long-first":
-          filtered.sort((a, b) => b.length - a.length)
-          break
-        case "short-first":
-          filtered.sort((a, b) => a.length - b.length)
-          break
-        case "short-only":
-          filtered = filtered.filter(fact => fact.length < 100)
-          break
-        case "long-only":
-          filtered = filtered.filter(fact => fact.length >= 100)
-          break
-      }
-
-      this.facts = filtered
-    },
-
+    }
   },
-  created() {
-  this.checkAuth()
-  this.$store.dispatch('fetchFacts').then(() => {
-    this.facts = this.$store.state.allFacts
-    this.filterFacts()
-  })
-}
+  async created() {
+    this.checkAuth()
+    await this.$store.dispatch("fetchFacts", { limit: this.itemsPerPage })
+    this.loading = false
+  }
 }
 </script>
-
-
 
 <style scoped>
 .facts-container {
   min-height: 100vh;
   background: #ffffff;
 }
-
 
 .main-content {
   max-width: 1440px;
@@ -153,84 +143,54 @@ export default {
   margin: 0 auto;
 }
 
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
 
-/* Responsive design */
+.load-more-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: #6E72EC;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.load-more-btn:hover {
+  background: #5a63d8;
+}
+
+.no-facts {
+  text-align: center;
+  margin-top: 50px;
+  color: #666;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .facts-container {
-    padding: 15px;
-  }
-  
-  .facts-header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .header-left {
-    justify-content: center;
-  }
-  
   .main-content {
     padding: 0 20px;
   }
-  
-  .main-title {
-    font-size: 2rem;
-    margin: 30px 0 20px 0;
-  }
-  
+
   .controls-row {
     flex-direction: column;
     gap: 15px;
     align-items: stretch;
   }
-  
-  .search-container {
-    max-width: none;
-  }
-  
-  .dropdown-container {
-    min-width: auto;
-  }
-  
-  .header-right {
-    justify-content: center;
-  }
-  
-  .facts-header h1 {
-    font-size: 1.8rem;
-  }
-  
+
   .facts-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
-  .fact-card {
-    padding: 20px;
-  }
 }
-
-.cat-photo {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
 
 @media (max-width: 480px) {
-  .facts-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .fact-content h3 {
-    font-size: 1.1rem;
-  }
-  
-  .cat-emoji {
-    font-size: 2.5rem;
+  .main-title {
+    font-size: 1.8rem;
   }
 }
 </style>
