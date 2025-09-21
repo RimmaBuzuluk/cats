@@ -1,30 +1,32 @@
 <template>
-    <header class="facts-header">
-      <div class="header-left">
-        <img src="@/img/Logo.png" alt="Logo" class="logo">
+  <header class="facts-header">
+    <div class="header-left">
+      <img src="@/img/Logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="header-right">
+      <div class="theme-switch" @click="$emit('toggle-theme')">
+        <img src="@/img/sun.png" alt="Theme" class="theme-icon">
       </div>
-      <div class="header-right">
-        <div class="theme-switch" @click="$emit('toggle-theme')">
-          <img src="@/img/sun.png" alt="Theme" class="theme-icon">
-        </div>
-        <div class="user-avatar">
-          {{ username.charAt(0).toUpperCase() }}
-        </div>
+
+      <div v-if="username" class="user-avatar">
+        {{ username.charAt(0).toUpperCase() }}
       </div>
-    </header>
-  </template>
-  
-  <script>
-  export default {
-    name: 'HeaderBar',
-    props: {
-      username: {
-        type: String,
-        default: 'Користувач'
-      }
+    </div>
+  </header>
+</template>
+
+<script>
+export default {
+  name: 'HeaderBar',
+  props: {
+    username: {
+      type: String,
+      default: ''
     }
   }
-  </script>
+}
+</script>
+
   
   <style scoped>
   .facts-header {

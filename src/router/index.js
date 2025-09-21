@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Facts from '../views/Facts.vue'
-import Fact from '../views/Fact.vue'
 
 Vue.use(VueRouter)
 
@@ -23,9 +22,8 @@ const routes = [
   },
   {
     path: '/fact/:id',
-    name: 'Fact',
-    component: Fact,
-    props: true
+    name: 'fact',
+    component: () => import('@/views/Fact.vue')
   }
 ]
 

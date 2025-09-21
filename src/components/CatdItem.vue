@@ -1,8 +1,6 @@
 <template>
-    <div 
-      class="fact-card"
-      @click="$emit('open', fact.id)"
-    >
+   <div class="fact-card" @click="$emit('open', fact)">
+
       <div class="fact-image">
         <img :src="fact.image" alt="Cat" class="cat-photo" />
       </div>
@@ -35,6 +33,11 @@
     flex-direction: column;
     gap:24px
   }
+
+  .fact-card:hover{
+    background:#EBECFF;
+  }
+
 
   
   .cat-photo {
