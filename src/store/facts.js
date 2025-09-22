@@ -1,9 +1,20 @@
-export default{
+export default {
   namespaced: true,
   state: {
     allFacts: [],
-     searchQuery: "",
-    selectedFilter: "all"
+    searchQuery: "",
+    selectedFilter: "all",
+    localImages: [
+      require("@/img/cat_imgs/cat1.png"),
+      require("@/img/cat_imgs/cat2.png"),
+      require("@/img/cat_imgs/cat3.png"),
+      require("@/img/cat_imgs/cat4.png"),
+      require("@/img/cat_imgs/cat5.png"),
+      require("@/img/cat_imgs/cat6.png"),
+      require("@/img/cat_imgs/cat7.png"),
+      require("@/img/cat_imgs/cat8.png"),
+      require("@/img/cat_imgs/cat9.png"),
+    ]
   },
   mutations: {
     setFacts(state, facts) {
@@ -20,52 +31,49 @@ export default{
     }
   },
   actions: {
-    async fetchFacts({ commit }, { limit = 10, max_length = 200 } = {}) {
+    async fetchFacts({ state, commit }, { limit = 10, max_length = 200 } = {}) {
       try {
-        const res = await fetch(`https://catfact.ninja/facts?limit=${limit}&max_length=${max_length}`)
+        const res = await fetch(
+          `https://catfact.ninja/facts?limit=${limit}&max_length=${max_length}`
+        )
         const data = await res.json()
         const facts = Array.isArray(data.data) ? data.data : []
 
-        const images = await Promise.all(
-          facts.map(() =>
-            fetch("https://api.thecatapi.com/v1/images/search")
-              .then(res => res.json())
-              .then(imgData => imgData[0]?.url || "")
-          )
-        )
+        const factsWithImages = facts.map((fact, index) => {
+          const imgIndex = (state.allFacts.length + index) % state.localImages.length
+          return {
+            id: Date.now() + state.allFacts.length + index,
+            ...fact,
+            image: state.localImages[imgIndex]
+          }
+        })
+        
 
-        const factsWithImages = facts.map((fact, index) => ({
-          id: Date.now() + index, 
-          ...fact,
-          image: images[index]
-        }))
-
-        commit('addFacts', factsWithImages)
+        commit("addFacts", factsWithImages)
       } catch (err) {
         console.error("Помилка завантаження фактів:", err)
-        commit('addFacts', [])
+        commit("addFacts", [])
       }
-    },
-
+    }
   },
   getters: {
-    getFactById: (state) => (id) => {
+    getFactById: state => id => {
       return state.allFacts.find(f => f.id === parseInt(id))
     },
     filteredFacts(state) {
       let filtered = [...state.allFacts]
-  
+
       if (state.searchQuery) {
         const query = state.searchQuery.toLowerCase()
         filtered = filtered.filter(f => f.fact.toLowerCase().includes(query))
       }
-  
+
       switch (state.selectedFilter) {
         case "long-first":
-          filtered.sort((a,b)=> b.fact.length - a.fact.length)
+          filtered.sort((a, b) => b.fact.length - a.fact.length)
           break
         case "short-first":
-          filtered.sort((a,b)=> a.fact.length - b.fact.length)
+          filtered.sort((a, b) => a.fact.length - b.fact.length)
           break
         case "short-only":
           filtered = filtered.filter(f => f.fact.length < 100)
@@ -74,7 +82,7 @@ export default{
           filtered = filtered.filter(f => f.fact.length >= 100)
           break
       }
-  
+
       return filtered
     }
   }

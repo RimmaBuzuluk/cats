@@ -22,7 +22,7 @@
 
     <div class="facts-grid">
       <CardItem
-        v-for="fact in paginatedFacts"
+        v-for="fact in filteredFacts"
         :key="fact.id"
         :fact="fact"
         @open="goToFact(fact)"
@@ -30,12 +30,12 @@
     </div>
 
     <div v-if="hasMoreFacts" class="load-more-container">
-      <button class="load-more-btn" @click="loadMore">Load more facts</button>
+      <button class="load-more-btn" @click="loadMore" :disabled="loading">
+        {{ loading ? "Loading..." : "Load more facts" }}
+      </button>
     </div>
 
-    <div v-if="loading" class="no-facts">
-      <p>Факти завантажуються...</p>
-    </div>
+    <FooterBar/>
   </div>
 </template>
 
@@ -45,71 +45,78 @@ import CardItem from "@/components/CatdItem.vue"
 import HeaderBar from "@/components/HeaderBar.vue"
 import SearchInput from "@/components/SearchInput.vue"
 import FilterDropdown from "@/components/FilterDropdown.vue"
+import FooterBar from "@/components/FooterBar.vue"
 
 export default {
   name: "FactsPage",
-  components: { CardItem, HeaderBar, SearchInput, FilterDropdown },
+  components: { CardItem, HeaderBar, SearchInput, FilterDropdown, FooterBar },
   data() {
     return {
       username: localStorage.getItem("username") || "Користувач",
       itemsPerPage: 10,
-      loading: true,
-      currentPage: 0
+      loading: false,
+      currentPage: 0,
+      totalPages: 5 // 👈 можна динамічно рахувати, але для прикладу ставимо 5
     }
   },
   computed: {
-  ...mapState("facts", ["searchQuery", "selectedFilter"]),
-  ...mapGetters("facts", ["filteredFacts"]),
-  paginatedFacts() {
-    const facts = this.filteredFacts || []
-    return facts.slice(0, (this.currentPage + 1) * this.itemsPerPage)
-  },
-  hasMoreFacts() {
-    return this.paginatedFacts.length < (this.filteredFacts || []).length
-  }
-},
-methods: {
-  ...mapMutations("facts", ["setSearchQuery", "setFilter"]),
-
-  setSearch(query) {
-    this.setSearchQuery(query)
-    this.currentPage = 0
-  },
-  setFilterOption(filter) {
-    this.setFilter(filter)
-    this.currentPage = 0
-  },
-  async loadMore() {
-    this.loading = true
-    this.currentPage++
-    await this.$store.dispatch("facts/fetchFacts", { limit: this.itemsPerPage })
-    this.loading = false
-  },
-  goToFact(fact) {
-    this.$router.push({ name: "fact", params: { id: fact.id } })
-  },
-  toggleTheme() {
-    document.body.classList.toggle("dark-theme")
-  },
-  checkAuth() {
-    if (!localStorage.getItem("isAuthenticated")) {
-      this.$router.push("/login")
+    ...mapState("facts", ["searchQuery", "selectedFilter", "allFacts"]),
+    ...mapGetters("facts", ["filteredFacts"]),
+    hasMoreFacts() {
+      return this.currentPage < this.totalPages
     }
-  }
-},
+  },
+  methods: {
+    ...mapMutations("facts", ["setSearchQuery", "setFilter"]),
+
+    setSearch(query) {
+      this.setSearchQuery(query)
+    },
+    setFilterOption(filter) {
+      this.setFilter(filter)
+    },
+
+    async loadMore() {
+      if (this.loading) return
+      this.loading = true
+      this.currentPage++
+
+      await this.$store.dispatch("facts/fetchFacts", { limit: this.itemsPerPage })
+      this.loading = false
+    },
+
+    goToFact(fact) {
+      this.$router.push({ name: "fact", params: { id: fact.id } })
+    },
+    toggleTheme() {
+      document.body.classList.toggle("dark-theme")
+    },
+    checkAuth() {
+      if (!localStorage.getItem("isAuthenticated")) {
+        this.$router.push("/login")
+      }
+    }
+  },
   async created() {
     this.checkAuth()
+    this.loading = true
+    this.currentPage = 1
     await this.$store.dispatch("facts/fetchFacts", { limit: this.itemsPerPage })
     this.loading = false
   }
-
 }
 </script>
+
 
 <style scoped>
 .facts-container {
   min-height: 100vh;
   background: #ffffff;
+}
+
+
+body.dark-theme .facts-container {
+  background-color: #202020; 
 }
 
 .main-content {
@@ -125,6 +132,10 @@ methods: {
   margin: 57px 0 32px 0;
   font-weight: 700;
   line-height: 56px;
+}
+
+body.dark-theme .main-title {
+  color: #DCDCDC; 
 }
 
 .controls-row {
@@ -166,6 +177,12 @@ methods: {
   background: #5a63d8;
   color: white;
 }
+
+
+body.dark-theme .load-more-btn {
+  background-color: #202020; 
+}
+
 
 .no-facts {
   text-align: center;

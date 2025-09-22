@@ -81,6 +81,13 @@
     cursor: pointer;
     user-select: none;
   }
+
+  body.dark-theme .dropdown-container {
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
+
+
   
   .dropdown-selected {
     padding: 12px 16px;
@@ -90,6 +97,11 @@
     border-radius: 6px;
     background-color: #EBECFF;
   }
+
+  body.dark-theme .dropdown-selected {
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
   
   .dropdown-icon {
     width: 24px;
@@ -97,7 +109,17 @@
     color: #434343;
     transition: transform 0.3s ease;
   }
-  
+
+  body.dark-theme .dropdown-icon {
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
+
+  /* body.dark-theme .dropdown-container {
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
+   */
   .dropdown-icon.open {
     transform: rotate(180deg);
   }
@@ -108,12 +130,18 @@
     left: 0;
     width: 100%;
     background-color: #EBECFF;
-    border-radius: 6px;
     margin-top: 6px;
     list-style: none;
     padding: 0;
     z-index: 10;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  body.dark-theme .dropdown-list {
+    background-color: #4D4E69; 
+    color: #C6C6C6;
+    font-weight: 400;
+    line-height: 27px;
   }
   
   .dropdown-list li {
@@ -127,6 +155,11 @@
   .dropdown-list li.active {
     color: #6E72EC;
   }
+
+
+  body.dark-theme   .dropdown-list li.active {
+    color: #FFFFFF;
+  }
   
   .checkmark-icon {
   width: 24px;
@@ -135,5 +168,9 @@
   flex-shrink: 0;
   margin-left: 8px;
 }
+
+body.dark-theme   .checkmark-icon  {
+    color: #FFFFFF;
+  }
   </style>
   

@@ -80,11 +80,19 @@ computed: {
   background: #ffffff;
 }
 
+body.dark-theme .login-container{
+  background-color: #202020;
+}
+
 .login-card {
   padding: 40px 30px;
   border-radius: 16px;
   background: #ffffff;
   text-align: center;
+}
+
+body.dark-theme .login-card {
+  background-color: #202020;
 }
 
 .login-page {
@@ -101,6 +109,12 @@ computed: {
   color: #232323;
 }
 
+body.dark-theme .login-title  {
+  color: #DCDCDC;
+}
+
+
+
 .form-group {
   text-align: left;
   margin-bottom: 20px;
@@ -111,6 +125,10 @@ computed: {
   line-height: 27px;
   font-weight: 500;
   color: #434343;
+}
+
+body.dark-theme .form-group label   {
+  color: #ffffff;
 }
 
 .form-group input {
@@ -126,9 +144,27 @@ computed: {
   transition: border 0.3s ease;
 }
 
+
+body.dark-theme input {
+  background-color: #4D4E69;
+  color: #ffffff
+}
+
 .form-group input:focus {
   border: 1px solid #6E72EC;
 }
+
+body.dark-theme .form-group input:focus {
+  border: 1px solid #8588EF;
+}
+
+.form-group input::placeholder {
+    color: #A9A9A9;
+  }
+
+  body.dark-theme .form-group input::placeholder {
+    color: #C4C4C4;
+  }
 
 /* Новий стиль при помилці */
 .input-error {
@@ -158,6 +194,10 @@ computed: {
   cursor: pointer;
 }
 
+body.dark-theme .login-btn {
+  background: #8588EF;
+
+}
 .login-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

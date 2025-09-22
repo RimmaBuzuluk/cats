@@ -24,6 +24,7 @@ export default {
       const newTheme = state.theme === "dark" ? "light" : "dark"
       commit("SET_THEME", newTheme)
       localStorage.setItem("theme", newTheme)
+      
     }
   },
   getters: {

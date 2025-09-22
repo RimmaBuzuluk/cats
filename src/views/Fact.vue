@@ -1,18 +1,13 @@
 <template>
   <div class="fact-container">
-    <!-- Header -->
     <HeaderBar 
       :username="username" 
       @toggle-theme="toggleTheme" 
     />
-
-    <!-- Buttons row -->
     <div class="buttons-row">
       <button class="back-btn" @click="goBack">← Back</button>
       <button class="logout-btn" @click="logout">Log out</button>
     </div>
-
-    <!-- Fact detail -->
     <div v-if="fact" class="fact-detail">
       <img :src="fact.image" alt="Cat" class="fact-image" />
       <h1 class="fact-text">{{ fact.fact }}</h1>
@@ -67,17 +62,20 @@ export default {
 
 <style scoped>
 .fact-container {
-  /* max-width: 1200px; */
   margin: 0 auto;
-  /* padding: 20px; */
+  min-height: 100vh;
 }
+
+
+body.dark-theme .fact-container{
+    background-color: #202020; 
+  }
 
 .buttons-row {
     max-width: 1200px;
     margin: 7px auto;
     display: flex;
     justify-content: space-between;
-  /* margin: 20px 0; */
 }
 
 .back-btn,
@@ -87,13 +85,18 @@ export default {
   font-weight: 400;
   cursor: pointer;
   color: #434343;
-  /* box-sizing: border-box d; */
 }
 
 .back-btn {
   background-color: white;
-  /* margin: 17px 0; */
+  line-height: 27px;
 }
+
+body.dark-theme .back-btn{
+    background-color: #202020; 
+    color: #D3D3D3;
+
+  }
 
 .back-btn:hover {
 }
@@ -107,8 +110,19 @@ export default {
   text-align: left;
 }
 
+
+body.dark-theme .logout-btn{
+    background-color: #313247; 
+    color: #D3D3D3;
+
+  }
+
 .logout-btn:hover {
-  background: #ff5252;
+  background: #acadbf;
+}
+
+body.dark-theme .logout-btn:hover {
+  background: #4c4e6c;
 }
 
 /* Fact detail */
@@ -133,6 +147,11 @@ export default {
   color: #232323;
   max-width: 854px;
   line-height: 1.5;
+}
+
+body.dark-theme .fact-text{
+  color: #ffffff;
+
 }
 
 /* Loading */

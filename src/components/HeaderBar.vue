@@ -56,6 +56,10 @@ export default {
   padding: 0 72px;
 }
 
+body.dark-theme .facts-header {
+  background-color: #1A1B43; 
+}
+
 .header-right{
   display: flex;
   gap: 14px
@@ -74,6 +78,10 @@ export default {
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   transition: background 0.3s ease;
   padding: 0 8px; 
+}
+
+body.dark-theme .theme-switch {
+  background-color: #000000; 
 }
 
 .theme-icon {

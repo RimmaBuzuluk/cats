@@ -52,6 +52,11 @@
     display: flex;
     align-items: center;
   }
+
+  body.dark-theme .search-container{
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
   
   .search-icon {
     width: 24px;
@@ -59,6 +64,10 @@
     flex-shrink: 0;
     color: #434343;
     margin-right: 9px;
+  }
+
+  body.dark-theme .search-icon{
+    color: #E2E2E2;
   }
   
   .search-input {
@@ -68,9 +77,20 @@
     background-color: #EBECFF;
     color: #A9A9A9;
   }
+
+  body.dark-theme .search-input {
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
+  
   .search-input::placeholder {
-  color: #A9A9A9;
-}
+    color: #A9A9A9;
+  }
+
+  body.dark-theme .search-input::placeholder {
+    background-color: #4D4E69; 
+    color: #E2E2E2;
+  }
   
   .search-input:focus {
     outline: none;

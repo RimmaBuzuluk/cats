@@ -36,6 +36,10 @@ export default {
   gap: 24px;
 }
 
+body.dark-theme .fact-card  {
+  background-color: #202020; 
+}
+
 .fact-card:hover {
   background: #ebecff;
 }
@@ -63,5 +67,9 @@ export default {
   color: #434343;
   font-weight: 400;
   line-height: 22px;
+}
+
+body.dark-theme .long-fact,  body.dark-theme .short-fact {
+  color: #ffffff
 }
 </style>
