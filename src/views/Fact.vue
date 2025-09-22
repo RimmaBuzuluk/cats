@@ -7,7 +7,16 @@
     <div class="content-wrapper">
 
     <div class="buttons-row">
-      <button class="back-btn" @click="goBack">← Back</button>
+      <button class="back-btn" @click="goBack">
+        <svg 
+          class="back-icon" 
+          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" 
+          width="20" height="20"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
+      </button>
       <button class="logout-btn" @click="logout">Log out</button>
     </div>
     <div v-if="fact" class="fact-detail">
@@ -167,6 +176,23 @@ body.dark-theme .fact-text{
   text-align: center;
   padding: 60px 20px;
   color: #666;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: 400;
+  color: #434343;
+  line-height: 27px;
+}
+
+.back-icon {
+  stroke: currentColor; 
 }
 
 @media (max-width: 1024px) {

@@ -114,12 +114,6 @@
     background-color: #4D4E69; 
     color: #E2E2E2;
   }
-
-  /* body.dark-theme .dropdown-container {
-    background-color: #4D4E69; 
-    color: #E2E2E2;
-  }
-   */
   .dropdown-icon.open {
     transform: rotate(180deg);
   }

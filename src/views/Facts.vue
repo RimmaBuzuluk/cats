@@ -5,34 +5,40 @@
       @toggle-theme="toggleTheme" 
     />
 
-    <div class="main-content">
-      <h1 class="main-title">Facts About Cats To Share With Kids!</h1>
-      
-      <div class="controls-row">
-        <SearchInput 
-          :modelValue="searchQuery"
-          @update:modelValue="setSearch"
-        />
-        <FilterDropdown 
-          :modelValue="selectedFilter"
-          @update:modelValue="setFilterOption"
+    <div v-if="loading" class="loading-wrapper">
+      <LoadingItem />
+    </div>
+
+    <div v-else>
+      <div class="main-content">
+        <h1 class="main-title">Facts About Cats To Share With Kids!</h1>
+        
+        <div class="controls-row">
+          <SearchInput 
+            :modelValue="searchQuery"
+            @update:modelValue="setSearch"
+          />
+          <FilterDropdown 
+            :modelValue="selectedFilter"
+            @update:modelValue="setFilterOption"
+          />
+        </div>
+      </div>
+
+      <div class="facts-grid">
+        <CardItem
+          v-for="fact in filteredFacts"
+          :key="fact.id"
+          :fact="fact"
+          @open="goToFact(fact)"
         />
       </div>
-    </div>
 
-    <div class="facts-grid">
-      <CardItem
-        v-for="fact in filteredFacts"
-        :key="fact.id"
-        :fact="fact"
-        @open="goToFact(fact)"
-      />
-    </div>
-
-    <div v-if="hasMoreFacts" class="load-more-container">
-      <button class="load-more-btn" @click="loadMore" :disabled="loading">
-        {{ loading ? "Loading..." : "Load more facts" }}
-      </button>
+      <div v-if="hasMoreFacts" class="load-more-container">
+        <button class="load-more-btn" @click="loadMore" :disabled="loading">
+          {{ loading ? "Loading..." : "Load more facts" }}
+        </button>
+      </div>
     </div>
 
     <FooterBar/>
@@ -46,10 +52,12 @@ import HeaderBar from "@/components/HeaderBar.vue"
 import SearchInput from "@/components/SearchInput.vue"
 import FilterDropdown from "@/components/FilterDropdown.vue"
 import FooterBar from "@/components/FooterBar.vue"
+import LoadingItem from "@/components/loadingItem.vue"
+
 
 export default {
   name: "FactsPage",
-  components: { CardItem, HeaderBar, SearchInput, FilterDropdown, FooterBar },
+  components: { CardItem, HeaderBar, SearchInput, FilterDropdown, FooterBar, LoadingItem },
   data() {
     return {
       username: localStorage.getItem("username") || "Користувач",
@@ -191,6 +199,13 @@ body.dark-theme .load-more-btn {
   text-align: center;
   margin-top: 50px;
   color: #666;
+}
+
+.loading-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
 }
 
 @media (max-width: 1024px) {
