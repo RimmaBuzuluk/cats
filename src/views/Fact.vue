@@ -4,6 +4,8 @@
       :username="username" 
       @toggle-theme="toggleTheme" 
     />
+    <div class="content-wrapper">
+
     <div class="buttons-row">
       <button class="back-btn" @click="goBack">← Back</button>
       <button class="logout-btn" @click="logout">Log out</button>
@@ -16,15 +18,19 @@
     <div v-else class="loading">
       <p>Завантаження факту...</p>
     </div>
+    </div>
+    <FooterBar/>
   </div>
 </template>
 
 <script>
 import HeaderBar from "@/components/HeaderBar.vue"
+import FooterBar from "@/components/FooterBar.vue"
+
 
 export default {
   name: 'FactPage',
-  components: { HeaderBar },
+  components: { HeaderBar, FooterBar },
   computed: {
     fact() {
       return this.$store.getters["facts/getFactById"](this.$route.params.id)
@@ -62,8 +68,15 @@ export default {
 
 <style scoped>
 .fact-container {
-  margin: 0 auto;
   min-height: 100vh;
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper{
+width: 1200px;
+  margin: 0 auto;
 }
 
 
@@ -72,11 +85,11 @@ body.dark-theme .fact-container{
   }
 
 .buttons-row {
-    max-width: 1200px;
-    margin: 7px auto;
+    margin-top: 7px;
     display: flex;
     justify-content: space-between;
-}
+    width: 100%;
+    }
 
 .back-btn,
 .logout-btn {
@@ -97,9 +110,6 @@ body.dark-theme .back-btn{
     color: #D3D3D3;
 
   }
-
-.back-btn:hover {
-}
 
 .logout-btn {
   background: #EBECFF;
@@ -125,7 +135,6 @@ body.dark-theme .logout-btn:hover {
   background: #4c4e6c;
 }
 
-/* Fact detail */
 .fact-detail {
   display: flex;
   flex-direction: column;
@@ -154,33 +163,66 @@ body.dark-theme .fact-text{
 
 }
 
-/* Loading */
 .loading {
   text-align: center;
   padding: 60px 20px;
   color: #666;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
+  .content-wrapper {
+    width: 95%; 
+  }
+
   .fact-image {
     width: 100%;
-    height: auto;
+    height: auto; 
   }
 
   .fact-text {
     font-size: 1.5rem;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .fact-text {
+    font-size: 1.3rem;
+  }
+
+  .buttons-row {
+    gap: 8px;
   }
 }
 
 @media (max-width: 480px) {
+  .content-wrapper {
+    width: 100%;
+    padding: 0 10px;
+    height: 75vh;
+  }
+
   .buttons-row {
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+  }
+
+  .back-btn,
+  .logout-btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 14px;
   }
 
   .fact-text {
     font-size: 1.2rem;
+    padding: 0 5px;
+  }
+
+  .fact-image {
+    width: 100%;
+    height: auto;
   }
 }
 </style>

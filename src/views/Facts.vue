@@ -56,7 +56,7 @@ export default {
       itemsPerPage: 10,
       loading: false,
       currentPage: 0,
-      totalPages: 5 // 👈 можна динамічно рахувати, але для прикладу ставимо 5
+      totalPages: 5 
     }
   },
   computed: {
@@ -112,6 +112,9 @@ export default {
 .facts-container {
   min-height: 100vh;
   background: #ffffff;
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -190,7 +193,18 @@ body.dark-theme .load-more-btn {
   color: #666;
 }
 
-/* Responsive */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 0 40px;
+  }
+
+  .facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    row-gap: 30px;
+  }
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding: 0 20px;
@@ -204,13 +218,25 @@ body.dark-theme .load-more-btn {
 
   .facts-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    column-gap: 0;
+    row-gap: 20px;
+  }
+
+  .load-more-btn {
+    width: 100%;
+    padding: 12px 0;
   }
 }
 
 @media (max-width: 480px) {
   .main-title {
     font-size: 1.8rem;
+    margin: 40px 0 24px 0;
+    line-height: 1.3;
+  }
+
+  .controls-row {
+    gap: 10px;
   }
 }
 </style>

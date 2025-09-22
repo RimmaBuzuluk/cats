@@ -24,6 +24,15 @@ body {
   line-height: 22px;
   color: #434343;
   background-color: white;
+  height: 100%;
+  margin: 0;
+}
+
+
+#app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 body.dark-theme body {

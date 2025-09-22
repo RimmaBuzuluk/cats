@@ -61,9 +61,9 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 30px 60px;
+    margin-top: auto;
   }
   
-  /* 1 рядок */
   .footer-top {
     display: flex;
     justify-content: space-between;
@@ -148,5 +148,103 @@
     gap: 5px;
     cursor: pointer;
   }
+
+  @media (max-width: 1024px) {
+  .footer {
+    padding: 30px 40px;
+  }
+
+  .footer-top {
+    gap: 40px;
+  }
+
+  .footer-logo img {
+    width: 150px;
+  }
+
+  .footer-menus {
+    gap: 40px;
+  }
+
+  .menu h4 {
+    font-size: 14px;
+  }
+
+  .menu ul li a {
+    font-size: 13px;
+  }
+
+  .social-list {
+    gap: 18px;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 25px 20px;
+    height: auto; /* щоб футер підлаштовувався під контент */
+  }
+
+  .footer-top {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-menus {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .menu h4 {
+    font-size: 13px;
+  }
+
+  .menu ul li a {
+    font-size: 12px;
+  }
+
+  .social-list {
+    gap: 12px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 20px 15px;
+  }
+
+  .footer-logo img {
+    width: 120px;
+  }
+
+  .menu h4 {
+    font-size: 12px;
+  }
+
+  .menu ul li a {
+    font-size: 11px;
+  }
+
+  .social-list {
+    gap: 10px;
+  }
+
+  .footer-bottom {
+    font-size: 11px;
+  }
+}
   </style>
   

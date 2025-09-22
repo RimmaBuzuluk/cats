@@ -72,15 +72,23 @@ computed: {
 </script>
 
 <style scoped>
-.login-container {
+.login-page {
+  width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container {
+  flex: 1; 
   display: flex;
   justify-content: center;
   align-items: center;
   background: #ffffff;
+  width: 100%;
 }
 
-body.dark-theme .login-container{
+body.dark-theme .login-container {
   background-color: #202020;
 }
 
@@ -89,17 +97,13 @@ body.dark-theme .login-container{
   border-radius: 16px;
   background: #ffffff;
   text-align: center;
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
 }
 
 body.dark-theme .login-card {
   background-color: #202020;
-}
-
-.login-page {
-  min-height: 100vh;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
 }
 
 .login-title {
@@ -113,8 +117,6 @@ body.dark-theme .login-title  {
   color: #DCDCDC;
 }
 
-
-
 .form-group {
   text-align: left;
   margin-bottom: 20px;
@@ -127,12 +129,12 @@ body.dark-theme .login-title  {
   color: #434343;
 }
 
-body.dark-theme .form-group label   {
+body.dark-theme .form-group label {
   color: #ffffff;
 }
 
 .form-group input {
-  width: 410px;
+  width: 100%; 
   padding: 10.5px 16px;
   border: none;
   border-radius: 6px;
@@ -144,10 +146,9 @@ body.dark-theme .form-group label   {
   transition: border 0.3s ease;
 }
 
-
 body.dark-theme input {
   background-color: #4D4E69;
-  color: #ffffff
+  color: #ffffff;
 }
 
 .form-group input:focus {
@@ -159,14 +160,13 @@ body.dark-theme .form-group input:focus {
 }
 
 .form-group input::placeholder {
-    color: #A9A9A9;
-  }
+  color: #A9A9A9;
+}
 
-  body.dark-theme .form-group input::placeholder {
-    color: #C4C4C4;
-  }
+body.dark-theme .form-group input::placeholder {
+  color: #C4C4C4;
+}
 
-/* Новий стиль при помилці */
 .input-error {
   border: 1px solid #FF4646 !important;
 }
@@ -180,9 +180,8 @@ body.dark-theme .form-group input:focus {
   margin-top: 4px;
 }
 
-/* Кнопка без ефекту hover */
 .login-btn {
-  width: 224px;
+  width: 100%;
   padding: 14px;
   font-weight: 600;
   font-size: 18px;
@@ -196,29 +195,48 @@ body.dark-theme .form-group input:focus {
 
 body.dark-theme .login-btn {
   background: #8588EF;
-
 }
+
 .login-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .login-card {
-    padding: 30px 20px;
+    padding: 35px 20px;
   }
 
   .login-title {
-    font-size: 28px;
-  }
-
-  .form-group input {
-    font-size: 14px;
+    font-size: 22px;
   }
 
   .login-btn {
     font-size: 16px;
+    padding: 12px;
   }
 }
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 15px;
+    border-radius: 12px;
+  }
+
+  .login-title {
+    font-size: 20px;
+    margin-bottom: 36px;
+  }
+
+  .form-group input {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .login-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
 </style>
