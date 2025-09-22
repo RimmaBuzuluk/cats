@@ -30,7 +30,7 @@
     </div>
 
     <div v-if="hasMoreFacts" class="load-more-container">
-      <button class="load-more-btn" @click="loadMore">Load more</button>
+      <button class="load-more-btn" @click="loadMore">Load more facts</button>
     </div>
 
     <div v-if="loading" class="no-facts">
@@ -58,50 +58,51 @@ export default {
     }
   },
   computed: {
-    ...mapState(["searchQuery", "selectedFilter"]),
-    ...mapGetters(["filteredFacts"]),
-    paginatedFacts() {
-      return this.filteredFacts.slice(0, (this.currentPage + 1) * this.itemsPerPage)
-    },
-    hasMoreFacts() {
-      return this.paginatedFacts.length < this.filteredFacts.length
-    },
-    
+  ...mapState("facts", ["searchQuery", "selectedFilter"]),
+  ...mapGetters("facts", ["filteredFacts"]),
+  paginatedFacts() {
+    const facts = this.filteredFacts || []
+    return facts.slice(0, (this.currentPage + 1) * this.itemsPerPage)
   },
-  methods: {
-    ...mapMutations(["setSearchQuery", "setFilter"]),
+  hasMoreFacts() {
+    return this.paginatedFacts.length < (this.filteredFacts || []).length
+  }
+},
+methods: {
+  ...mapMutations("facts", ["setSearchQuery", "setFilter"]),
 
-    setSearch(query) {
-      this.setSearchQuery(query)
-      this.currentPage = 0
-    },
-    setFilterOption(filter) {
-      this.setFilter(filter)
-      this.currentPage = 0
-    },
-    async loadMore() {
-      this.loading = true
-      this.currentPage++
-      await this.$store.dispatch("fetchFacts", { limit: this.itemsPerPage })
-      this.loading = false
-    },
-    goToFact(fact) {
-      this.$router.push({ name: "fact", params: { id: fact.id } })
-    },
-    toggleTheme() {
-      document.body.classList.toggle("dark-theme")
-    },
-    checkAuth() {
-      if (!localStorage.getItem("isAuthenticated")) {
-        this.$router.push("/login")
-      }
-    }
+  setSearch(query) {
+    this.setSearchQuery(query)
+    this.currentPage = 0
   },
+  setFilterOption(filter) {
+    this.setFilter(filter)
+    this.currentPage = 0
+  },
+  async loadMore() {
+    this.loading = true
+    this.currentPage++
+    await this.$store.dispatch("facts/fetchFacts", { limit: this.itemsPerPage })
+    this.loading = false
+  },
+  goToFact(fact) {
+    this.$router.push({ name: "fact", params: { id: fact.id } })
+  },
+  toggleTheme() {
+    document.body.classList.toggle("dark-theme")
+  },
+  checkAuth() {
+    if (!localStorage.getItem("isAuthenticated")) {
+      this.$router.push("/login")
+    }
+  }
+},
   async created() {
     this.checkAuth()
-    await this.$store.dispatch("fetchFacts", { limit: this.itemsPerPage })
+    await this.$store.dispatch("facts/fetchFacts", { limit: this.itemsPerPage })
     this.loading = false
   }
+
 }
 </script>
 
@@ -150,18 +151,20 @@ export default {
 }
 
 .load-more-btn {
-  padding: 12px 24px;
-  font-size: 16px;
+  padding: 15px 91px;
+  font-size: 18px;
   font-weight: 600;
-  color: white;
-  background: #6E72EC;
-  border: none;
+  line-height: 18px;
+  color: #6E72EC;
+  background: white;
+  border: 1px solid #6E72EC;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .load-more-btn:hover {
   background: #5a63d8;
+  color: white;
 }
 
 .no-facts {

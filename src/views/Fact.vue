@@ -32,7 +32,7 @@ export default {
   components: { HeaderBar },
   computed: {
     fact() {
-      return this.$store.getters.getFactById(this.$route.params.id)
+      return this.$store.getters["facts/getFactById"](this.$route.params.id)
     },
     username() {
       return localStorage.getItem('username') || "Користувач"

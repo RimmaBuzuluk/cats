@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from '../src/store/facts'
+import store from './store/index'
 
 Vue.config.productionTip = false
+
+store.dispatch('theme/initTheme')
+
 
 new Vue({
   router,
