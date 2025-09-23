@@ -85,13 +85,28 @@ export default {
     },
 
     async loadMore() {
-      if (this.loading) return
-      this.loading = true
-      this.currentPage++
+  if (this.loading) return
+  this.loading = true
+  this.currentPage++
 
-      await this.$store.dispatch("facts/fetchFacts", { limit: this.itemsPerPage })
-      this.loading = false
-    },
+  await this.$store.dispatch("facts/fetchFacts", { 
+    limit: this.itemsPerPage, 
+    page: this.currentPage 
+  })
+
+  this.loading = false
+},
+
+async created() {
+  this.checkAuth()
+  this.loading = true
+  this.currentPage = 1
+  await this.$store.dispatch("facts/fetchFacts", { 
+    limit: this.itemsPerPage, 
+    page: this.currentPage 
+  })
+  this.loading = false
+},
 
     goToFact(fact) {
       this.$router.push({ name: "fact", params: { id: fact.id } })

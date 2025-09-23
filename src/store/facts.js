@@ -31,14 +31,14 @@ export default {
     }
   },
   actions: {
-    async fetchFacts({ state, commit }, { limit = 10, max_length = 200 } = {}) {
+    async fetchFacts({ state, commit }, { limit = 10, max_length = 200, page = 1 } = {}) {
       try {
         const res = await fetch(
-          `https://catfact.ninja/facts?limit=${limit}&max_length=${max_length}`
+          `https://catfact.ninja/facts?limit=${limit}&max_length=${max_length}&page=${page}`
         )
         const data = await res.json()
         const facts = Array.isArray(data.data) ? data.data : []
-
+  
         const factsWithImages = facts.map((fact, index) => {
           const imgIndex = (state.allFacts.length + index) % state.localImages.length
           return {
@@ -47,8 +47,7 @@ export default {
             image: state.localImages[imgIndex]
           }
         })
-        
-
+  
         commit("addFacts", factsWithImages)
       } catch (err) {
         console.error("Помилка завантаження фактів:", err)
